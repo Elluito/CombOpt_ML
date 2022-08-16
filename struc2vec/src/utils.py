@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from time import time
 import logging,inspect
-import cPickle as pickle
+import pickle
 from itertools import islice
 import os.path
 

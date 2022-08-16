@@ -1,0 +1,16 @@
+## WARNING!
+## The current directory is in your home directory. Please use the high-performance
+## cluster filesystem /nobackup. See documentation for information.
+## WARNING!
+
+## Hosts assigned to job 4213648.1:
+##
+## db12gpu2.arc3.leeds.ac.uk 12 slots
+##
+## Resources granted:
+##
+## h_vmem = 5726623061 (per slot)
+## h_rt   = 01:00:00
+## disk   = 1G (per slot)
+
+/home/home01/sclaam/.conda/envs/GraphNetworks/bin/python
