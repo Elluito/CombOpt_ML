@@ -24,5 +24,6 @@
 which python
 #nvcc --version
 #~python $1 $2 $3 $4 $5 $6
-#python src/main.py --input $1 --output $2 --num-walks 20 --walk-length 80 --window-size 5 --dimensions 2 --OPT1 True --OPT2 True --OPT3 True --until-layer 6
+#python src/main.py --input $1 --output $2 --num-walks 20 --walk-length 80 --window-size 5 --dimensions 16 --OPT1 True
+# --OPT2 True --OPT3 True --until-layer 6
 python src/main.py --input graph/karate-mirrored.edgelist --output emb/karate-mirrored.emb
