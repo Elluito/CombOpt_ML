@@ -25,6 +25,13 @@ def get_df_solution(type):
             edges.to_csv(file_name.replace("wclq", "edgelist"), index=False, header=False, sep=" ")
 
 
+def get_list_of_files(dir, extension):
+    with open(dir + "/" + extension.replace(".", "") + "_files.txt", "a") as f:
+        patern = "{}/*.{}".format(dir, extension.replace(".", ""))
+        for file_name in glob.glob(patern):
+            f.write(file_name+"\n")
+
+
 def to_edgelist(type):
     if type == "train":
         # Load the problems
@@ -51,7 +58,7 @@ def test():
     df = pd.read_csv("datasets/C1000-9.mtx", prefix="V", sep=" ", skiprows=2)
 
 
-
 if __name__ == '__main__':
-    to_edgelist("train")
-    to_edgelist("test")
+    get_list_of_files("datasets/test","edgelist")
+    # to_edgelist("train")
+    # to_edgelist("test")
