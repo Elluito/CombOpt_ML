@@ -1,8 +1,8 @@
-datasets/train\DSJC1000.5.edgelist
-datasets/train\p_hat1000-1.edgelist
-datasets/train\p_hat1000-2.edgelist
-datasets/train\p_hat1000-3.edgelist
-datasets/train\p_hat1500-1.edgelist
-datasets/train\p_hat1500-2.edgelist
-datasets/train\p_hat300-1.edgelist
-datasets/train\san1000.edgelist
+datasets/train/DSJC1000.5.edgelist
+datasets/train/p_hat1000-1.edgelist
+datasets/train/p_hat1000-2.edgelist
+datasets/train/p_hat1000-3.edgelist
+datasets/train/p_hat1500-1.edgelist
+datasets/train/p_hat1500-2.edgelist
+datasets/train/p_hat300-1.edgelist
+datasets/train/san1000.edgelist
