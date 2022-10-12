@@ -19,7 +19,7 @@ def read_node_values(type):
 def get_df_solution(type):
     if type == "train":
         for file_name in glob.glob("datasets/train/*.sol"):
-            df = pd.read_csv(file_name, sep=" ", skiprows=1, names=["type", "v1", "v2", "v3"])
+            df = pd.read_csv(file_name, sep=" ", skiprows=2, names=["type", "v1", "v2", "v3"])
             edges = df[df["type"] == "e"]
             edges = edges.drop(["type", "v3"], axis=1)
             edges.to_csv(file_name.replace("wclq", "edgelist"), index=False, header=False, sep=" ")
