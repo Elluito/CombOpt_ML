@@ -2,6 +2,7 @@ import numpy as np
 from moead_framework.problem.problem import Problem
 from moead_framework.solution.one_dimension_solution import OneDimensionSolution
 import networkx as nx
+import pandas as pd
 
 
 class KnapsackProblem(Problem):
@@ -166,7 +167,7 @@ class KnapsackProblem(Problem):
         :return: {:class:`~moead_framework.solution.one_dimension_solution.OneDimensionSolution`}
         """
 
-        return self.evaluate(x=np.random.randint(0, 2, self.number_of_objects).tolist()[:])
+        return self.generate_solution(array=np.random.randint(0, 2, self.number_of_objects)[:])
 
     def generate_solution(self, array, evaluate=True):
         """
@@ -176,6 +177,12 @@ class KnapsackProblem(Problem):
         :param evaluate: {boolean} specify if the new solution is evaluated. The default value is True.
         :return: {:class:`~moead_framework.solution.one_dimension_solution.OneDimensionSolution`}
         """
+        f_list = None
+        if evaluate:
+            f_list = [self.f(i, array) for i in range(1, self.number_of_objective + 1)]
+
+        return OneDimensionSolution(solution=array, f=f_list)
+
 
 class MaximumCliqueProblem(Problem):
     """
@@ -209,7 +216,7 @@ class MaximumCliqueProblem(Problem):
         self.instance_file = instance_file
         self.problem_type = problem_type
 
-        df = pd.read_csv(instance_file, sep=" ", skiprows=2, prefix="V")
+        df = pd.read_csv(instance_file, sep=" ", skiprows=2, names=["V0","V1"])
         G = nx.from_pandas_edgelist(df, source="V0", target="V1")
 
         if problem_type == "MWC":
@@ -217,11 +224,11 @@ class MaximumCliqueProblem(Problem):
             for node in range(G.number_of_nodes()):
                 weights[node] = {"weight": node % 200 + 1}
             G.set_node_attributes(weight)
-        elif probllem_type == "BOMWC":
+        elif problem_type == "BOMWC":
             weights = {}
-            for node in range(G.number_of_nodes()):
+            for node in range(1,G.number_of_nodes()+1):
                 weights[node] = {"weight": (node % 200 + 1) * (-1) ** node}
-            G.set_node_attributes(weight)
+            nx.set_node_attributes(G,weights)
         self.graph: nx.Graph = G
 
     def is_subclique(self, nodelist):
@@ -243,14 +250,14 @@ class MaximumCliqueProblem(Problem):
         subgraph: nx.Graph = self.graph.subgraph(subgraph_list)
         if not self.is_subclique(subgraph_list):
             raise Exception("The solution is not a clique")
-        weigths = nx.get_node_attributes(subgraph, "weight")
+        weigths:dict = nx.get_node_attributes(subgraph, "weight")
         if self.problem_type == "MWC":
-            return -np.sum(weigths)
+            return -np.sum(list(weigths.values()))
         if self.problem_type == "BOMWC":
             # This one is the sum of the weigths
             if function_id == 0:
-                return -np.sum(weigths)
-            # This is the size of the clique
+                return -np.sum(list(weigths.values()))
+                # This is the size of the clique
             if function_id == 1:
                 return -subgraph.number_of_nodes()
         else:
@@ -261,13 +268,14 @@ class MaximumCliqueProblem(Problem):
         Generate a random solution for the current problem
         :return: {:class:`~moead_framework.solution.one_dimension_solution.OneDimensionSolution`}
         """
-        random_node = int(np.random.randint(0,self.graph.number_of_nodes(),1))
-        list_of_cliques = nx.algorithms.cliques_containing_node(self.graph,random_node)
-        random_index = int(np.random.randint(0,len(list_of_cliques) , 1))
+        random_node = int(np.random.randint(1, self.graph.number_of_nodes()+1, 1))
+        list_of_cliques = nx.algorithms.cliques_containing_node(self.graph, random_node)
+        random_index = int(np.random.randint(0, len(list_of_cliques), 1))
         clique = list_of_cliques[random_index]
         solution = np.zeros((len(self.graph.number_of_nodes())))
         solution[clique] = 1
-        return self.evaluate(x=solution)
+        return self.generate_solution(array=solution)
+
     def generate_solution(self, array, evaluate=True):
         """
         Generate a predefined solution for the current problem with array
@@ -276,3 +284,8 @@ class MaximumCliqueProblem(Problem):
         :param evaluate: {boolean} specify if the new solution is evaluated. The default value is True.
         :return: {:class:`~moead_framework.solution.one_dimension_solution.OneDimensionSolution`}
         """
+        f_list = None
+        if evaluate:
+            f_list = [self.f(i, array) for i in range(1, self.number_of_objective + 1)]
+
+        return OneDimensionSolution(solution=array, f=f_list)
